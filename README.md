@@ -6,8 +6,11 @@ A simple and efficient Go application that fetches and analyzes your Strava acti
 
 - 🔐 Secure OAuth token refresh for Strava API access
 - 📊 Fetch and display recent activities with comprehensive data
+- 🎯 **Weekly Goals Tracking** - Set and track running and workout goals
+- 🏃‍♂️ Running goal tracking with distance progress (km per week)
+- 💪 Workout goal tracking with time progress (hours per week)
+- 📈 Progress visualization with percentages and motivational messages
 - 🎯 Enhanced activity analysis with calculated fields (pace, distance conversion)
-- 🏃‍♂️ Special handling for running activities with pace calculations
 - ❤️ Heart rate data display when available
 - 📅 Beautiful, emoji-enhanced activity summaries
 
@@ -25,11 +28,16 @@ Copy the example environment file and update it with your credentials:
 cp .env.example .env
 ```
 
-Then edit `.env` with your actual Strava API credentials:
+Then edit `.env` with your actual Strava API credentials and weekly goals:
 ```env
+# Strava API Configuration
 STRAVA_CLIENT_ID=your_actual_client_id
 STRAVA_CLIENT_SECRET=your_actual_client_secret
 STRAVA_REFRESH_TOKEN=your_actual_refresh_token
+
+# Weekly Goals Configuration
+WEEKLY_RUNNING_GOAL_KM=10      # Target: 10km of running per week
+WEEKLY_WORKOUT_GOAL_HOURS=3    # Target: 3 hours of workouts per week
 ```
 
 ### 3. Run the Application
@@ -39,6 +47,34 @@ go run main.go
 
 ## Sample Output 📈
 
+```
+🚀 Strava Custom Goals Tracker Starting...
+📡 Authenticating with Strava API...
+✅ Successfully authenticated
+📊 Fetching recent activities...
+✅ Retrieved 5 activities
+🎯 Calculating weekly goals progress...
+
+🎯 === WEEKLY GOALS PROGRESS ===
+   🏃‍♂️ Running Goal: 8.5/10.0 km 🟠 (85.0%)
+      💭 Need 1.5 km more to reach your goal
+   💪 Workout Goal: 2.5/3.0 hours 🟡 (83.3%)
+      💭 Need 0.5 hours more to reach your goal
+   📊 This Week: 3 runs, 2 workouts, 5 total activities
+
+   🔥 You're over halfway to both goals! Keep pushing!
+
+🏃‍♂️ === RECENT ACTIVITIES ===
+
+📈 Activity 1
+   🏷️  Name: Morning Run
+   🎯 Type: Run
+   📏 Distance: 5.23 km
+   ⏱️  Moving Time: 25m 14s
+   🏃 Average Pace: 4:49 min/km
+   ❤️  Avg Heart Rate: 165 bpm
+   👍 Kudos: 3
+   📅 Date: Oct 1, 2025 07:30
 ```
 🚀 Strava Custom Goals Tracker Starting...
 📡 Authenticating with Strava API...
