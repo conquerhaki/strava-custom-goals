@@ -2,6 +2,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -12,10 +13,10 @@ import (
 
 // Config holds all configuration values
 type Config struct {
-	ClientID              string
-	ClientSecret          string
-	RefreshToken          string
-	WeeklyRunningGoalKm   float64
+	ClientID               string
+	ClientSecret           string
+	RefreshToken           string
+	WeeklyRunningGoalKm    float64
 	WeeklyWorkoutGoalHours float64
 }
 
@@ -47,11 +48,31 @@ func LoadConfig() *Config {
 	}
 
 	// Validate required configuration
-	if config.ClientID == "" || config.ClientSecret == "" || config.RefreshToken == "" {
-		log.Fatal("❌ Missing required environment variables. Please check your .env file or set STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, and STRAVA_REFRESH_TOKEN")
+	if err := validateConfig(config); err != nil {
+		log.Fatal("❌ Configuration validation failed: ", err)
 	}
 
 	return config
+}
+
+// validateConfig validates the configuration values
+func validateConfig(cfg *Config) error {
+	if cfg.ClientID == "" {
+		return fmt.Errorf("STRAVA_CLIENT_ID is required")
+	}
+	if cfg.ClientSecret == "" {
+		return fmt.Errorf("STRAVA_CLIENT_SECRET is required")
+	}
+	if cfg.RefreshToken == "" {
+		return fmt.Errorf("STRAVA_REFRESH_TOKEN is required")
+	}
+	if cfg.WeeklyRunningGoalKm < 0 {
+		return fmt.Errorf("WEEKLY_RUNNING_GOAL_KM must be non-negative")
+	}
+	if cfg.WeeklyWorkoutGoalHours < 0 {
+		return fmt.Errorf("WEEKLY_WORKOUT_GOAL_HOURS must be non-negative")
+	}
+	return nil
 }
 
 // getEnvOrDefault gets an environment variable or returns a default value

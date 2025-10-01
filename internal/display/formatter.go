@@ -79,29 +79,59 @@ func DisplaySummary(activities []models.Activity) {
 // DisplayWeeklyGoalsProgress shows progress toward weekly fitness goals
 func DisplayWeeklyGoalsProgress(progress *goals.WeeklyProgress) {
 	fmt.Println("\n🎯 === WEEKLY GOALS PROGRESS ===")
-	
+
 	// Running progress
 	runningPercent := progress.GetRunningProgressPercentage()
+<<<<<<< Updated upstream
 	runningStatus, runningBar := getProgressDisplay(runningPercent)
 	
 	fmt.Printf("   🏃‍♂️ Running Target: %.1f km / %.1f km (%.1f%%)\n", 
 		progress.RunningDistance, progress.Goals.RunningGoalKm, runningPercent)
 	fmt.Printf("      %s %s\n", runningBar, runningStatus)
 	
+=======
+	runningStatus := "🔴"
+	if progress.IsRunningGoalAchieved() {
+		runningStatus = "✅"
+	} else if runningPercent >= 75 {
+		runningStatus = "🟡"
+	} else if runningPercent >= 50 {
+		runningStatus = "🟠"
+	}
+
+	fmt.Printf("   🏃‍♂️ Running Goal: %.1f/%.1f km %s (%.1f%%)\n",
+		progress.RunningDistance, progress.Goals.RunningGoalKm, runningStatus, runningPercent)
+
+>>>>>>> Stashed changes
 	if !progress.IsRunningGoalAchieved() {
 		fmt.Printf("      💭 Still need: %.1f km to complete your weekly goal\n", progress.GetRunningRemainingDistance())
 	} else {
 		fmt.Printf("      🎉 Goal achieved! You've exceeded by %.1f km\n", progress.RunningDistance-progress.Goals.RunningGoalKm)
 	}
-	
+
 	// Workout progress
 	workoutPercent := progress.GetWorkoutProgressPercentage()
+<<<<<<< Updated upstream
 	workoutStatus, workoutBar := getProgressDisplay(workoutPercent)
 	
 	fmt.Printf("\n   💪 Workout Target: %.1f hours / %.1f hours (%.1f%%)\n", 
 		progress.WorkoutHours, progress.Goals.WorkoutGoalHours, workoutPercent)
 	fmt.Printf("      %s %s\n", workoutBar, workoutStatus)
 	
+=======
+	workoutStatus := "🔴"
+	if progress.IsWorkoutGoalAchieved() {
+		workoutStatus = "✅"
+	} else if workoutPercent >= 75 {
+		workoutStatus = "🟡"
+	} else if workoutPercent >= 50 {
+		workoutStatus = "🟠"
+	}
+
+	fmt.Printf("   💪 Workout Goal: %.1f/%.1f hours %s (%.1f%%)\n",
+		progress.WorkoutHours, progress.Goals.WorkoutGoalHours, workoutStatus, workoutPercent)
+
+>>>>>>> Stashed changes
 	if !progress.IsWorkoutGoalAchieved() {
 		workoutRemaining := progress.GetWorkoutRemainingHours()
 		hours := int(workoutRemaining)
@@ -115,6 +145,7 @@ func DisplayWeeklyGoalsProgress(progress *goals.WeeklyProgress) {
 		excess := progress.WorkoutHours - progress.Goals.WorkoutGoalHours
 		fmt.Printf("      🎉 Goal achieved! You've exceeded by %.1f hours\n", excess)
 	}
+<<<<<<< Updated upstream
 	
 	// Weekly activity summary
 	fmt.Printf("\n   📊 This Week Summary:\n")
@@ -122,6 +153,13 @@ func DisplayWeeklyGoalsProgress(progress *goals.WeeklyProgress) {
 	fmt.Printf("      💪 Workouts: %d activities\n", progress.WorkoutCount)
 	fmt.Printf("      📈 Total: %d activities\n", progress.TotalActivities)
 	
+=======
+
+	// Activity counts for this week
+	fmt.Printf("   📊 This Week: %d runs, %d workouts, %d total activities\n",
+		progress.RunCount, progress.WorkoutCount, progress.TotalActivities)
+
+>>>>>>> Stashed changes
 	// Motivational message
 	fmt.Printf("\n   💬 %s\n", progress.GetMotivationalMessage())
 }
