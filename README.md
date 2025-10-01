@@ -56,13 +56,20 @@ go run main.go
 🎯 Calculating weekly goals progress...
 
 🎯 === WEEKLY GOALS PROGRESS ===
-   🏃‍♂️ Running Goal: 8.5/10.0 km 🟠 (85.0%)
-      💭 Need 1.5 km more to reach your goal
-   💪 Workout Goal: 2.5/3.0 hours 🟡 (83.3%)
-      💭 Need 0.5 hours more to reach your goal
-   📊 This Week: 3 runs, 2 workouts, 5 total activities
+   🏃‍♂️ Running Target: 8.5 km / 10.0 km (85.0%)
+      [█████████████████░░░] � ALMOST THERE
+      �💭 Still need: 1.5 km to complete your weekly goal
 
-   🔥 You're over halfway to both goals! Keep pushing!
+   💪 Workout Target: 2.5 hours / 3.0 hours (83.3%)
+      [████████████████░░░░] 🟡 ALMOST THERE
+      💭 Still need: 30m to complete your weekly goal
+
+   📊 This Week Summary:
+      🏃 Runs: 3 activities
+      💪 Workouts: 2 activities
+      📈 Total: 5 activities
+
+   💬 🔥 You're over halfway to both goals! Keep pushing!
 
 🏃‍♂️ === RECENT ACTIVITIES ===
 
