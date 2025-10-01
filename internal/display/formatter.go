@@ -82,44 +82,83 @@ func DisplayWeeklyGoalsProgress(progress *goals.WeeklyProgress) {
 	
 	// Running progress
 	runningPercent := progress.GetRunningProgressPercentage()
-	runningStatus := "🔴"
-	if progress.IsRunningGoalAchieved() {
-		runningStatus = "✅"
-	} else if runningPercent >= 75 {
-		runningStatus = "🟡"
-	} else if runningPercent >= 50 {
-		runningStatus = "🟠"
-	}
+	runningStatus, runningBar := getProgressDisplay(runningPercent)
 	
-	fmt.Printf("   🏃‍♂️ Running Goal: %.1f/%.1f km %s (%.1f%%)\n", 
-		progress.RunningDistance, progress.Goals.RunningGoalKm, runningStatus, runningPercent)
+	fmt.Printf("   🏃‍♂️ Running Target: %.1f km / %.1f km (%.1f%%)\n", 
+		progress.RunningDistance, progress.Goals.RunningGoalKm, runningPercent)
+	fmt.Printf("      %s %s\n", runningBar, runningStatus)
 	
 	if !progress.IsRunningGoalAchieved() {
-		fmt.Printf("      💭 Need %.1f km more to reach your goal\n", progress.GetRunningRemainingDistance())
+		fmt.Printf("      💭 Still need: %.1f km to complete your weekly goal\n", progress.GetRunningRemainingDistance())
+	} else {
+		fmt.Printf("      🎉 Goal achieved! You've exceeded by %.1f km\n", progress.RunningDistance-progress.Goals.RunningGoalKm)
 	}
 	
 	// Workout progress
 	workoutPercent := progress.GetWorkoutProgressPercentage()
-	workoutStatus := "🔴"
-	if progress.IsWorkoutGoalAchieved() {
-		workoutStatus = "✅"
-	} else if workoutPercent >= 75 {
-		workoutStatus = "🟡"
-	} else if workoutPercent >= 50 {
-		workoutStatus = "🟠"
-	}
+	workoutStatus, workoutBar := getProgressDisplay(workoutPercent)
 	
-	fmt.Printf("   💪 Workout Goal: %.1f/%.1f hours %s (%.1f%%)\n", 
-		progress.WorkoutHours, progress.Goals.WorkoutGoalHours, workoutStatus, workoutPercent)
+	fmt.Printf("\n   💪 Workout Target: %.1f hours / %.1f hours (%.1f%%)\n", 
+		progress.WorkoutHours, progress.Goals.WorkoutGoalHours, workoutPercent)
+	fmt.Printf("      %s %s\n", workoutBar, workoutStatus)
 	
 	if !progress.IsWorkoutGoalAchieved() {
-		fmt.Printf("      💭 Need %.1f hours more to reach your goal\n", progress.GetWorkoutRemainingHours())
+		workoutRemaining := progress.GetWorkoutRemainingHours()
+		hours := int(workoutRemaining)
+		minutes := int((workoutRemaining - float64(hours)) * 60)
+		if hours > 0 {
+			fmt.Printf("      💭 Still need: %dh %dm to complete your weekly goal\n", hours, minutes)
+		} else {
+			fmt.Printf("      💭 Still need: %dm to complete your weekly goal\n", minutes)
+		}
+	} else {
+		excess := progress.WorkoutHours - progress.Goals.WorkoutGoalHours
+		fmt.Printf("      🎉 Goal achieved! You've exceeded by %.1f hours\n", excess)
 	}
 	
-	// Activity counts for this week
-	fmt.Printf("   📊 This Week: %d runs, %d workouts, %d total activities\n", 
-		progress.RunCount, progress.WorkoutCount, progress.TotalActivities)
+	// Weekly activity summary
+	fmt.Printf("\n   📊 This Week Summary:\n")
+	fmt.Printf("      🏃 Runs: %d activities\n", progress.RunCount)
+	fmt.Printf("      💪 Workouts: %d activities\n", progress.WorkoutCount)
+	fmt.Printf("      📈 Total: %d activities\n", progress.TotalActivities)
 	
 	// Motivational message
-	fmt.Printf("\n   %s\n", progress.GetMotivationalMessage())
+	fmt.Printf("\n   💬 %s\n", progress.GetMotivationalMessage())
+}
+
+// getProgressDisplay returns a progress bar and status emoji based on percentage
+func getProgressDisplay(percent float64) (string, string) {
+	var status string
+	var bar string
+	
+	// Determine status emoji
+	if percent >= 100 {
+		status = "✅ COMPLETED"
+	} else if percent >= 75 {
+		status = "🟡 ALMOST THERE"
+	} else if percent >= 50 {
+		status = "🟠 HALFWAY"
+	} else if percent >= 25 {
+		status = "🔵 GETTING STARTED"
+	} else {
+		status = "🔴 JUST STARTED"
+	}
+	
+	// Create progress bar (20 characters wide)
+	filled := int(percent / 5) // Each character represents 5%
+	if filled > 20 {
+		filled = 20
+	}
+	
+	bar = "["
+	for i := 0; i < 20; i++ {
+		if i < filled {
+			bar += "█"
+		} else {
+			bar += "░"
+		}
+	}
+	bar += "]"
+	
+	return status, bar
 }
