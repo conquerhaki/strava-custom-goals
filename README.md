@@ -20,13 +20,16 @@ A simple and efficient Go application that fetches and analyzes your Strava acti
 4. Complete the OAuth flow once to get your `Refresh Token`
 
 ### 2. Configure Application
-Update the constants in `main.go`:
-```go
-const (
-    CLIENT_ID     = "your_client_id"     
-    CLIENT_SECRET = "your_client_secret" 
-    REFRESH_TOKEN = "your_refresh_token" 
-)
+Copy the example environment file and update it with your credentials:
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` with your actual Strava API credentials:
+```env
+STRAVA_CLIENT_ID=your_actual_client_id
+STRAVA_CLIENT_SECRET=your_actual_client_secret
+STRAVA_REFRESH_TOKEN=your_actual_refresh_token
 ```
 
 ### 3. Run the Application
@@ -55,6 +58,12 @@ go run main.go
    👍 Kudos: 3
    📅 Date: Oct 1, 2025 07:30
 ```
+
+## Security 🔒
+
+- **Never commit your `.env` file**: The `.env` file contains sensitive API credentials and is automatically ignored by git
+- **Use `.env.example`**: This file shows the required environment variables without exposing actual values
+- **Rotate credentials**: If you accidentally expose your credentials, regenerate them in your Strava API settings
 
 ## Contributing 🤝
 

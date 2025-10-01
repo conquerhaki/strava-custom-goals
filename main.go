@@ -9,7 +9,7 @@
 //
 // Setup:
 // 1. Create a Strava API application at https://www.strava.com/settings/api
-// 2. Replace the credentials in config/config.go with your CLIENT_ID, CLIENT_SECRET, and REFRESH_TOKEN
+// 2. Copy .env.example to .env and fill in your credentials
 // 3. Run: go run main.go
 package main
 
@@ -24,8 +24,11 @@ import (
 func main() {
 	log.Println("🚀 Strava Custom Goals Tracker Starting...")
 
+	// Load configuration from environment variables
+	cfg := config.LoadConfig()
+
 	// Initialize Strava client
-	stravaClient := client.NewStravaClient(config.ClientID, config.ClientSecret, config.RefreshToken)
+	stravaClient := client.NewStravaClient(cfg.ClientID, cfg.ClientSecret, cfg.RefreshToken)
 
 	// Get access token
 	log.Println("📡 Authenticating with Strava API...")
