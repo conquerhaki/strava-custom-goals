@@ -19,6 +19,7 @@ import (
 	"strava-custom-goals/config"
 	"strava-custom-goals/internal/client"
 	"strava-custom-goals/internal/display"
+	"strava-custom-goals/internal/goals"
 )
 
 func main() {
@@ -56,6 +57,17 @@ func main() {
 	for i := range activities {
 		activities[i].EnhanceWithCalculatedFields()
 	}
+
+	// Calculate weekly goals progress
+	log.Println("🎯 Calculating weekly goals progress...")
+	weeklyGoals := goals.WeeklyGoals{
+		RunningGoalKm:    cfg.WeeklyRunningGoalKm,
+		WorkoutGoalHours: cfg.WeeklyWorkoutGoalHours,
+	}
+	weeklyProgress := goals.CalculateWeeklyProgress(activities, weeklyGoals)
+
+	// Display weekly goals progress
+	display.DisplayWeeklyGoalsProgress(weeklyProgress)
 
 	// Display detailed activities
 	display.DisplayActivities(activities)

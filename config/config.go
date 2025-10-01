@@ -4,6 +4,7 @@ package config
 import (
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -11,9 +12,11 @@ import (
 
 // Config holds all configuration values
 type Config struct {
-	ClientID     string
-	ClientSecret string
-	RefreshToken string
+	ClientID              string
+	ClientSecret          string
+	RefreshToken          string
+	WeeklyRunningGoalKm   float64
+	WeeklyWorkoutGoalHours float64
 }
 
 // API endpoints and configuration constants
@@ -31,10 +34,16 @@ func LoadConfig() *Config {
 		log.Println("No .env file found, using environment variables")
 	}
 
+	// Parse weekly goals with defaults
+	weeklyRunningGoal, _ := strconv.ParseFloat(getEnvOrDefault("WEEKLY_RUNNING_GOAL_KM", "10"), 64)
+	weeklyWorkoutGoal, _ := strconv.ParseFloat(getEnvOrDefault("WEEKLY_WORKOUT_GOAL_HOURS", "3"), 64)
+
 	config := &Config{
-		ClientID:     getEnvOrDefault("STRAVA_CLIENT_ID", ""),
-		ClientSecret: getEnvOrDefault("STRAVA_CLIENT_SECRET", ""),
-		RefreshToken: getEnvOrDefault("STRAVA_REFRESH_TOKEN", ""),
+		ClientID:               getEnvOrDefault("STRAVA_CLIENT_ID", ""),
+		ClientSecret:           getEnvOrDefault("STRAVA_CLIENT_SECRET", ""),
+		RefreshToken:           getEnvOrDefault("STRAVA_REFRESH_TOKEN", ""),
+		WeeklyRunningGoalKm:    weeklyRunningGoal,
+		WeeklyWorkoutGoalHours: weeklyWorkoutGoal,
 	}
 
 	// Validate required configuration

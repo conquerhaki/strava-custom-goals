@@ -4,6 +4,7 @@ package display
 import (
 	"fmt"
 
+	"strava-custom-goals/internal/goals"
 	"strava-custom-goals/internal/models"
 )
 
@@ -73,4 +74,52 @@ func DisplaySummary(activities []models.Activity) {
 		avgDistance := totalDistance / float64(len(activities))
 		fmt.Printf("   📊 Average Distance: %.2f km\n", avgDistance)
 	}
+}
+
+// DisplayWeeklyGoalsProgress shows progress toward weekly fitness goals
+func DisplayWeeklyGoalsProgress(progress *goals.WeeklyProgress) {
+	fmt.Println("\n🎯 === WEEKLY GOALS PROGRESS ===")
+	
+	// Running progress
+	runningPercent := progress.GetRunningProgressPercentage()
+	runningStatus := "🔴"
+	if progress.IsRunningGoalAchieved() {
+		runningStatus = "✅"
+	} else if runningPercent >= 75 {
+		runningStatus = "🟡"
+	} else if runningPercent >= 50 {
+		runningStatus = "🟠"
+	}
+	
+	fmt.Printf("   🏃‍♂️ Running Goal: %.1f/%.1f km %s (%.1f%%)\n", 
+		progress.RunningDistance, progress.Goals.RunningGoalKm, runningStatus, runningPercent)
+	
+	if !progress.IsRunningGoalAchieved() {
+		fmt.Printf("      💭 Need %.1f km more to reach your goal\n", progress.GetRunningRemainingDistance())
+	}
+	
+	// Workout progress
+	workoutPercent := progress.GetWorkoutProgressPercentage()
+	workoutStatus := "🔴"
+	if progress.IsWorkoutGoalAchieved() {
+		workoutStatus = "✅"
+	} else if workoutPercent >= 75 {
+		workoutStatus = "🟡"
+	} else if workoutPercent >= 50 {
+		workoutStatus = "🟠"
+	}
+	
+	fmt.Printf("   💪 Workout Goal: %.1f/%.1f hours %s (%.1f%%)\n", 
+		progress.WorkoutHours, progress.Goals.WorkoutGoalHours, workoutStatus, workoutPercent)
+	
+	if !progress.IsWorkoutGoalAchieved() {
+		fmt.Printf("      💭 Need %.1f hours more to reach your goal\n", progress.GetWorkoutRemainingHours())
+	}
+	
+	// Activity counts for this week
+	fmt.Printf("   📊 This Week: %d runs, %d workouts, %d total activities\n", 
+		progress.RunCount, progress.WorkoutCount, progress.TotalActivities)
+	
+	// Motivational message
+	fmt.Printf("\n   %s\n", progress.GetMotivationalMessage())
 }
