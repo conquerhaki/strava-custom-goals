@@ -71,11 +71,11 @@ func CalculateWeeklyProgress(activities []models.Activity, goals WeeklyGoals) *W
 // isWorkoutActivity determines if an activity type counts as a workout
 func isWorkoutActivity(activityType string) bool {
 	workoutTypes := map[string]bool{
-		"WeightTraining":  true,
-		"Workout":         true,
-		"Crossfit":        true,
-		"StairStepper":    true,
-		"Elliptical":      true,
+		"WeightTraining": true,
+		"Workout":        true,
+		"Crossfit":       true,
+		"StairStepper":   true,
+		"Elliptical":     true,
 		"Yoga":           true,
 		"Pilates":        true,
 		"RockClimbing":   true,
@@ -142,7 +142,7 @@ func (p *WeeklyProgress) GetMotivationalMessage() string {
 	} else {
 		runningPercent := p.GetRunningProgressPercentage()
 		workoutPercent := p.GetWorkoutProgressPercentage()
-		
+
 		if runningPercent > 50 && workoutPercent > 50 {
 			return "🔥 You're over halfway to both goals! Keep pushing!"
 		} else if runningPercent > workoutPercent {

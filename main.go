@@ -14,6 +14,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 
 	"strava-custom-goals/config"
@@ -23,6 +24,20 @@ import (
 )
 
 func main() {
+	// Parse command line flags
+	var (
+		showHelp    = flag.Bool("help", false, "Show help message")
+		maxResults  = flag.Int("max", 30, "Maximum number of activities to fetch")
+		showSummary = flag.Bool("summary", true, "Show activity summary")
+		showDetails = flag.Bool("details", true, "Show detailed activities")
+	)
+	flag.Parse()
+
+	if *showHelp {
+		flag.Usage()
+		return
+	}
+
 	log.Println("🚀 Strava Custom Goals Tracker Starting...")
 
 	// Load configuration from environment variables
@@ -69,11 +84,23 @@ func main() {
 	// Display weekly goals progress
 	display.DisplayWeeklyGoalsProgress(weeklyProgress)
 
-	// Display detailed activities
-	display.DisplayActivities(activities)
+	// Display detailed activities (if requested)
+	if *showDetails {
+		display.DisplayActivities(activities[:min(len(activities), *maxResults)])
+	}
 
-	// Display summary
-	display.DisplaySummary(activities)
+	// Display summary (if requested)
+	if *showSummary {
+		display.DisplaySummary(activities)
+	}
 
 	log.Printf("🎯 Analysis complete: processed %d activities", len(activities))
+}
+
+// min returns the minimum of two integers
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
